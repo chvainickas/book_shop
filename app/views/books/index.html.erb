@@ -1,5 +1,7 @@
 <h1>Books</h1>
 
+<%= link_to 'New Book', new_book_path, class: 'btn btn-primary mb-3' %>
+
 <table class="table">
   <thead>
     <tr>
@@ -19,6 +21,7 @@
         <td><%= book.stock %></td>
         <td>
           <%= link_to 'Show', book, class: 'btn btn-sm btn-info' %>
+          <%= link_to 'Edit', edit_book_path(book), class: 'btn btn-sm btn-warning' %>
         </td>
       </tr>
     <% end %>

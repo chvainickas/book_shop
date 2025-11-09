@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :books, only: [:index, :show, :new, :create]
+  resources :books, only: [:index, :show, :new, :create, :edit, :update]
 
   # Reveal health status on /up
   get "up" => "rails/health#show", as: :rails_health_check
