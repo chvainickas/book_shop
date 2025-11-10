@@ -6,20 +6,7 @@
 <div class="row">
   <% @books.each do |book| %>
     <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <div class="card-body">
-          <h5 class="card-title"><%= book.title %></h5>
-          <h6 class="card-subtitle mb-2 text-muted"><%= book.author %></h6>
-          <p class="card-text"><%= truncate(book.description, length: 100) if book.description %></p>
-          <p class="text-success fw-bold">$<%= book.price %></p>
-          <p class="text-muted">Stock: <%= book.stock %></p>
-        </div>
-        <div class="card-footer bg-transparent">
-          <%= link_to 'View', book, class: 'btn btn-sm btn-info' %>
-          <%= link_to 'Edit', edit_book_path(book), class: 'btn btn-sm btn-warning' %>
-          <%= button_to 'Delete', book, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' %>
-        </div>
-      </div>
+      <%= render book %>
     </div>
   <% end %>
 </div>
