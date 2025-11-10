@@ -1,30 +1,25 @@
-<h1>Books</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>Books</h1>
+  <%= link_to 'New Book', new_book_path, class: 'btn btn-primary' %>
+</div>
 
-<%= link_to 'New Book', new_book_path, class: 'btn btn-primary mb-3' %>
-
-<table class="table">
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Author</th>
-      <th>Price</th>
-      <th>Stock</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @books.each do |book| %>
-      <tr>
-        <td><%= book.title %></td>
-        <td><%= book.author %></td>
-        <td>$<%= book.price %></td>
-        <td><%= book.stock %></td>
-        <td>
-          <%= link_to 'Show', book, class: 'btn btn-sm btn-info' %>
+<div class="row">
+  <% @books.each do |book| %>
+    <div class="col-md-4 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title"><%= book.title %></h5>
+          <h6 class="card-subtitle mb-2 text-muted"><%= book.author %></h6>
+          <p class="card-text"><%= truncate(book.description, length: 100) if book.description %></p>
+          <p class="text-success fw-bold">$<%= book.price %></p>
+          <p class="text-muted">Stock: <%= book.stock %></p>
+        </div>
+        <div class="card-footer bg-transparent">
+          <%= link_to 'View', book, class: 'btn btn-sm btn-info' %>
           <%= link_to 'Edit', edit_book_path(book), class: 'btn btn-sm btn-warning' %>
           <%= button_to 'Delete', book, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
