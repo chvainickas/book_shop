@@ -1,9 +1,13 @@
 Rails.application.routes.draw do
   resources :books
+  resources :users, only: [:new, :create]
 
-  # Reveal health status on /up
+  get "signup", to: "users#new"
+  get "login", to: "sessions#new"
+  post "login", to: "sessions#create"
+  delete "logout", to: "sessions#destroy"
+
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Defines the root path route ("/")
   root "books#index"
 end
