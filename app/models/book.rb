@@ -2,6 +2,7 @@ class Book < ApplicationRecord
   has_one_attached :image
   has_many :cart_items, dependent: :destroy
   has_many :order_items, dependent: :restrict_with_error
+  has_many :wishlist_items, dependent: :destroy
 
   validates :title, presence: true
   validates :author, presence: true

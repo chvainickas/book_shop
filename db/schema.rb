@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_15_164237) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_15_173102) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -94,6 +94,16 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_15_164237) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "wishlist_items", force: :cascade do |t|
+    t.integer "book_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["book_id"], name: "index_wishlist_items_on_book_id"
+    t.index ["user_id", "book_id"], name: "index_wishlist_items_on_user_id_and_book_id", unique: true
+    t.index ["user_id"], name: "index_wishlist_items_on_user_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "cart_items", "books"
@@ -102,4 +112,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_15_164237) do
   add_foreign_key "order_items", "books"
   add_foreign_key "order_items", "orders"
   add_foreign_key "orders", "users"
+  add_foreign_key "wishlist_items", "books"
+  add_foreign_key "wishlist_items", "users"
 end

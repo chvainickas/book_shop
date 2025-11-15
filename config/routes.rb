@@ -11,6 +11,11 @@ Rails.application.routes.draw do
     delete 'clear', on: :collection
   end
 
+  # Wishlist routes
+  get 'wishlist', to: 'wishlists#index', as: 'wishlist'
+  post 'wishlist/add_item', to: 'wishlists#add_item', as: 'add_item_wishlist'
+  delete 'wishlist/remove_item/:id', to: 'wishlists#remove_item', as: 'wishlist_remove_item'
+
   get "signup", to: "users#new"
   get "login", to: "sessions#new"
   post "login", to: "sessions#create"
