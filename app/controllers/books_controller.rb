@@ -2,7 +2,33 @@ class BooksController < ApplicationController
   before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
 
   def index
-    @pagy, @books = pagy(Book.search(params[:query]), limit: 12)
+    @categories = Category.all
+    @books = Book.all
+
+    # Filter by category
+    if params[:category_id].present? && params[:category_id] != ""
+      @books = @books.where(category_id: params[:category_id])
+      @current_category = Category.find_by(id: params[:category_id])
+    end
+
+    # Search
+    @books = @books.search(params[:query]) if params[:query].present?
+
+    # Sort
+    case params[:sort]
+    when 'price_low'
+      @books = @books.order(price: :asc, created_at: :desc)
+    when 'price_high'
+      @books = @books.order(price: :desc, created_at: :desc)
+    when 'title'
+      @books = @books.order(title: :asc)
+    when 'newest'
+      @books = @books.order(created_at: :desc)
+    else
+      @books = @books.order(created_at: :desc)
+    end
+
+    @pagy, @books = pagy(@books, limit: 12)
   end
 
   def show
@@ -44,6 +70,6 @@ class BooksController < ApplicationController
   private
 
   def book_params
-    params.require(:book).permit(:title, :author, :price, :stock, :description, :image)
+    params.require(:book).permit(:title, :author, :price, :stock, :description, :image, :category_id)
   end
 end

@@ -1,5 +1,49 @@
-<div class="d-flex justify-content-between align-items-center mb-4">
-  <h1>Books</h1>
+<nav aria-label="breadcrumb" class="mb-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to "Home", root_path, data: { turbo_frame: "_top" } %></li>
+    <% if @current_category %>
+      <li class="breadcrumb-item"><%= link_to "All Books", books_path, data: { turbo_frame: "_top" } %></li>
+      <li class="breadcrumb-item active" aria-current="page"><%= @current_category.name %></li>
+    <% else %>
+      <li class="breadcrumb-item active" aria-current="page">All Books</li>
+    <% end %>
+  </ol>
+</nav>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h1 class="mb-2">
+      <% if @current_category %>
+        <%= @current_category.name %>
+      <% else %>
+        All Books
+      <% end %>
+    </h1>
+    <% if params[:category_id].present? || params[:sort].present? %>
+      <div class="d-flex gap-2 flex-wrap">
+        <% if @current_category %>
+          <span class="badge bg-primary">
+            Category: <%= @current_category.name %>
+            <%= link_to books_path(query: params[:query], sort: params[:sort], view: params[:view]), class: "text-white ms-1", data: { turbo_frame: "_top" }, title: "Remove filter" do %>
+              &times;
+            <% end %>
+          </span>
+        <% end %>
+        <% if params[:sort].present? && params[:sort] != 'newest' %>
+          <span class="badge bg-info">
+            Sort:
+            <% case params[:sort]
+               when 'title' %>Title (A-Z)<%
+               when 'price_low' %>Price (Low to High)<%
+               when 'price_high' %>Price (High to Low)<% end %>
+            <%= link_to books_path(query: params[:query], category_id: params[:category_id], view: params[:view]), class: "text-white ms-1", data: { turbo_frame: "_top" }, title: "Remove sort" do %>
+              &times;
+            <% end %>
+          </span>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
   <% if admin? %>
     <%= link_to 'New Book', new_book_path, class: 'btn btn-primary' %>
   <% end %>
@@ -8,6 +52,9 @@
 <div class="row mb-4">
   <div class="col-md-6">
     <%= form_with url: books_path, method: :get, data: { turbo_frame: "books_list", turbo_action: "advance" } do |f| %>
+      <%= f.hidden_field :category_id, value: params[:category_id] %>
+      <%= f.hidden_field :sort, value: params[:sort] %>
+      <%= f.hidden_field :view, value: params[:view] %>
       <div class="input-group">
         <%= f.text_field :query,
             value: params[:query],
@@ -21,39 +68,76 @@
           </svg>
         </button>
         <% if params[:query].present? %>
-          <%= link_to 'Clear', books_path, class: 'btn btn-outline-danger' %>
+          <%= link_to 'Clear', books_path(category_id: params[:category_id], sort: params[:sort], view: params[:view]), class: 'btn btn-outline-danger', data: { turbo_frame: "_top" } %>
         <% end %>
       </div>
     <% end %>
   </div>
-  <div class="col-md-6 text-end">
-    <p class="text-muted mb-0">
-      <% if params[:query].present? %>
-        Found <%= @pagy.count %> <%= 'book'.pluralize(@pagy.count) %> matching "<%= params[:query] %>"
-      <% else %>
-        Showing <%= @pagy.count %> <%= 'book'.pluralize(@pagy.count) %>
-      <% end %>
-      (Page <%= @pagy.page %> of <%= @pagy.pages %>)
-    </p>
+  <div class="col-md-6">
+    <div class="d-flex justify-content-end align-items-center gap-2">
+      <div class="btn-group" role="group">
+        <%= link_to books_path(query: params[:query], category_id: params[:category_id], sort: params[:sort], view: 'grid'),
+            class: "btn btn-sm btn-outline-secondary #{params[:view] != 'list' ? 'active' : ''}",
+            title: "Grid view",
+            data: { turbo_frame: "_top" } do %>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid-3x3-gap" viewBox="0 0 16 16">
+            <path d="M4 2H2v2h2zM2 5h2v2H2zm0 3h2v2H2zm0 3h2v2H2zm3-9h2v2H5zm0 3h2v2H5zm0 3h2v2H5zm0 3h2v2H5zm3-9h2v2H8zm0 3h2v2H8zm0 3h2v2H8zm0 3h2v2H8zm3-9h2v2h-2zm0 3h2v2h-2zm0 3h2v2h-2zm0 3h2v2h-2z"/>
+          </svg>
+        <% end %>
+        <%= link_to books_path(query: params[:query], category_id: params[:category_id], sort: params[:sort], view: 'list'),
+            class: "btn btn-sm btn-outline-secondary #{params[:view] == 'list' ? 'active' : ''}",
+            title: "List view",
+            data: { turbo_frame: "_top" } do %>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+          </svg>
+        <% end %>
+      </div>
+      <div class="dropdown">
+        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          Sort:
+          <% case params[:sort]
+             when 'title' %>Title (A-Z)<%
+             when 'price_low' %>Price (Low to High)<%
+             when 'price_high' %>Price (High to Low)<%
+             else %>Newest<% end %>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="sortDropdown">
+          <li><%= link_to "Newest", books_path(query: params[:query], category_id: params[:category_id], sort: 'newest', view: params[:view]), class: "dropdown-item", data: { turbo_frame: "_top" } %></li>
+          <li><%= link_to "Title (A-Z)", books_path(query: params[:query], category_id: params[:category_id], sort: 'title', view: params[:view]), class: "dropdown-item", data: { turbo_frame: "_top" } %></li>
+          <li><%= link_to "Price (Low to High)", books_path(query: params[:query], category_id: params[:category_id], sort: 'price_low', view: params[:view]), class: "dropdown-item", data: { turbo_frame: "_top" } %></li>
+          <li><%= link_to "Price (High to Low)", books_path(query: params[:query], category_id: params[:category_id], sort: 'price_high', view: params[:view]), class: "dropdown-item", data: { turbo_frame: "_top" } %></li>
+        </ul>
+      </div>
+      <p class="text-muted mb-0 small">
+        <%= @pagy.count %> <%= 'book'.pluralize(@pagy.count) %>
+      </p>
+    </div>
   </div>
 </div>
 
 <%= turbo_frame_tag "books_list" do %>
-  <div class="row">
-    <% if @books.empty? %>
-      <div class="col-12">
-        <div class="alert alert-info">
-          No books found. Try a different search term.
+  <% if @books.empty? %>
+    <div class="alert alert-info">
+      No books found. Try a different search term.
+    </div>
+  <% elsif params[:view] == 'list' %>
+    <div class="row">
+      <% @books.each do |book| %>
+        <div class="col-12 mb-3">
+          <%= render partial: 'book_list', locals: { book: book } %>
         </div>
-      </div>
-    <% else %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="row">
       <% @books.each do |book| %>
         <div class="col-md-4 mb-4">
           <%= render book %>
         </div>
       <% end %>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 
   <% if @pagy.pages > 1 %>
     <div class="row mt-4">

@@ -3,6 +3,7 @@ class Book < ApplicationRecord
   has_many :cart_items, dependent: :destroy
   has_many :order_items, dependent: :restrict_with_error
   has_many :wishlist_items, dependent: :destroy
+  belongs_to :category, optional: true
 
   validates :title, presence: true
   validates :author, presence: true

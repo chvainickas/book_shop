@@ -1,3 +1,17 @@
+<nav aria-label="breadcrumb" class="mb-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to "Home", root_path %></li>
+    <% if @book.category %>
+      <li class="breadcrumb-item"><%= link_to "All Books", books_path %></li>
+      <li class="breadcrumb-item"><%= link_to @book.category.name, books_path(category_id: @book.category.id) %></li>
+      <li class="breadcrumb-item active" aria-current="page"><%= truncate(@book.title, length: 50) %></li>
+    <% else %>
+      <li class="breadcrumb-item"><%= link_to "All Books", books_path %></li>
+      <li class="breadcrumb-item active" aria-current="page"><%= truncate(@book.title, length: 50) %></li>
+    <% end %>
+  </ol>
+</nav>
+
 <div class="row">
   <div class="col-md-4 mb-4">
     <% if @book.image.attached? %>
@@ -14,6 +28,15 @@
       <h5 class="text-muted">Author</h5>
       <p class="fs-5"><%= @book.author %></p>
     </div>
+
+    <% if @book.category %>
+      <div class="mb-3">
+        <h5 class="text-muted">Category</h5>
+        <p class="fs-5">
+          <%= link_to @book.category.name, books_path(category_id: @book.category.id), class: "badge bg-secondary text-decoration-none fs-6" %>
+        </p>
+      </div>
+    <% end %>
 
     <div class="mb-3">
       <h5 class="text-muted">Price</h5>

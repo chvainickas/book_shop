@@ -36,6 +36,11 @@
       </div>
 
       <div class="mb-3">
+        <%= form.label :category_id, "Category", class: 'form-label' %>
+        <%= form.select :category_id, options_from_collection_for_select(Category.all, :id, :name, book.category_id), { include_blank: 'Select a category' }, class: 'form-select' %>
+      </div>
+
+      <div class="mb-3">
         <%= form.label :description, class: 'form-label' %>
         <%= form.text_area :description, rows: 4, class: 'form-control', placeholder: 'Enter book description' %>
       </div>
