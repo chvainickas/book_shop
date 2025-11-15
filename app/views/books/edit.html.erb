@@ -2,5 +2,7 @@
 
 <%= render 'form', book: @book %>
 
-<%= link_to 'Show', @book, class: 'btn btn-info' %> |
-<%= link_to 'Back', books_path, class: 'btn btn-secondary' %>
+<div class="d-flex gap-2 mt-3">
+  <%= link_to 'Show', @book, class: 'btn btn-info' %>
+  <%= link_to 'Back', books_path, class: 'btn btn-secondary' %>
+</div>

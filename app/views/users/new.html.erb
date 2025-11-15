@@ -4,7 +4,7 @@
       <div class="card-body">
         <h2 class="card-title text-center mb-4">Sign Up</h2>
 
-        <%= form_with(model: @user, local: true) do |form| %>
+        <%= form_with(model: @user, data: { turbo: false }) do |form| %>
           <% if @user.errors.any? %>
             <div class="alert alert-danger">
               <h4><%= pluralize(@user.errors.count, "error") %> prohibited this account from being created:</h4>
@@ -24,6 +24,7 @@
           <div class="mb-3">
             <%= form.label :password, class: 'form-label' %>
             <%= form.password_field :password, class: 'form-control', placeholder: 'Enter password' %>
+            <div class="form-text">Minimum 6 characters</div>
           </div>
 
           <div class="mb-3">
