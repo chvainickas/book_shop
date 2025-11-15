@@ -1,4 +1,4 @@
-g# Book Shop
+gg# Book Shop
 
 A Rails 8.1.1 application for managing a book shop.
 
