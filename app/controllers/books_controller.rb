@@ -2,7 +2,7 @@ class BooksController < ApplicationController
   before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
 
   def index
-    @books = Book.search(params[:query])
+    @pagy, @books = pagy(Book.search(params[:query]), limit: 12)
   end
 
   def show

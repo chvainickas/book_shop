@@ -10,6 +10,7 @@ gem "stimulus-rails"
 gem "jbuilder"
 
 gem "bcrypt", "~> 3.1.7"
+gem "pagy", "~> 9.0"
 
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
