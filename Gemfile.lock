@@ -421,7 +421,7 @@ DEPENDENCIES
   brakeman
   bundler-audit
   capybara
-  dartsass-rails (~> 0.5.1)
+  dartsass-rails
   debug
   image_processing (~> 1.2)
   importmap-rails

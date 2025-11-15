@@ -40,9 +40,47 @@
         <%= form.text_area :description, rows: 4, class: 'form-control', placeholder: 'Enter book description' %>
       </div>
 
+      <div class="mb-3">
+        <%= form.label :image, "Book Cover Image", class: 'form-label' %>
+        <%= form.file_field :image, class: 'form-control', accept: 'image/png,image/jpg,image/jpeg,image/gif,image/webp', id: 'book_image_input' %>
+        <div class="form-text">Accepted formats: PNG, JPG, JPEG, GIF, WEBP. Max size: 5MB</div>
+
+        <% if book.persisted? && book.image.attached? %>
+          <div class="mt-3">
+            <p class="mb-2"><strong>Current Image:</strong></p>
+            <%= image_tag book.image, class: 'img-thumbnail', style: 'max-width: 200px;', id: 'current_book_image' %>
+            <div class="form-check mt-2">
+              <%= form.check_box :remove_image, class: 'form-check-input', id: 'remove_image_checkbox' %>
+              <%= form.label :remove_image, "Remove current image", class: 'form-check-label' %>
+            </div>
+          </div>
+        <% end %>
+
+        <div id="image_preview" class="mt-3" style="display: none;">
+          <p class="mb-2"><strong>New Image Preview:</strong></p>
+          <img id="preview_img" class="img-thumbnail" style="max-width: 200px;" />
+        </div>
+      </div>
+
       <div class="d-grid">
         <%= form.submit class: 'btn btn-primary btn-lg' %>
       </div>
+
+      <script>
+        document.getElementById('book_image_input').addEventListener('change', function(e) {
+          const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              document.getElementById('preview_img').src = e.target.result;
+              document.getElementById('image_preview').style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+          } else {
+            document.getElementById('image_preview').style.display = 'none';
+          }
+        });
+      </script>
     <% end %>
   </div>
 </div>

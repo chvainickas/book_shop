@@ -1,9 +1,42 @@
-<h1><%= @book.title %></h1>
+<div class="row">
+  <div class="col-md-4 mb-4">
+    <% if @book.image.attached? %>
+      <%= image_tag @book.image, class: 'img-fluid rounded shadow', alt: @book.title %>
+    <% else %>
+      <%= image_tag 'placeholder_book.svg', class: 'img-fluid rounded shadow', style: 'padding: 60px; background-color: #f8f9fa; min-height: 400px;', alt: 'Book placeholder' %>
+    <% end %>
+  </div>
 
-<p><strong>Author:</strong> <%= @book.author %></p>
-<p><strong>Price:</strong> $<%= @book.price %></p>
-<p><strong>Stock:</strong> <%= @book.stock %></p>
-<p><strong>Description:</strong> <%= @book.description %></p>
+  <div class="col-md-8">
+    <h1 class="mb-4"><%= @book.title %></h1>
+
+    <div class="mb-3">
+      <h5 class="text-muted">Author</h5>
+      <p class="fs-5"><%= @book.author %></p>
+    </div>
+
+    <div class="mb-3">
+      <h5 class="text-muted">Price</h5>
+      <p class="fs-4 text-success fw-bold">$<%= @book.price %></p>
+    </div>
+
+    <div class="mb-3">
+      <h5 class="text-muted">Stock</h5>
+      <p class="fs-5">
+        <% if @book.stock > 0 %>
+          <span class="badge bg-success"><%= @book.stock %> available</span>
+        <% else %>
+          <span class="badge bg-danger">Out of stock</span>
+        <% end %>
+      </p>
+    </div>
+
+    <div class="mb-4">
+      <h5 class="text-muted">Description</h5>
+      <p class="fs-6"><%= @book.description %></p>
+    </div>
+  </div>
+</div>
 
 <%= link_to 'Edit', edit_book_path(@book), class: 'btn btn-warning' %> |
 <%= button_to 'Delete', @book, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %> |

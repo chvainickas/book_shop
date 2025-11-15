@@ -1,4 +1,9 @@
 <div class="card h-100">
+  <% if book.image.attached? %>
+    <%= image_tag book.image, class: 'card-img-top', style: 'height: 250px; object-fit: cover;', alt: book.title %>
+  <% else %>
+    <%= image_tag 'placeholder_book.svg', class: 'card-img-top', style: 'height: 250px; object-fit: contain; padding: 40px; background-color: #f8f9fa;', alt: 'Book placeholder' %>
+  <% end %>
   <div class="card-body">
     <h5 class="card-title"><%= book.title %></h5>
     <h6 class="card-subtitle mb-2 text-muted"><%= book.author %></h6>
