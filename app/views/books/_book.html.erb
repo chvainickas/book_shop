@@ -12,6 +12,13 @@
     <p class="text-muted">Stock: <%= book.stock %></p>
   </div>
   <div class="card-footer bg-transparent">
+    <% if logged_in? && !admin? %>
+      <% if book.in_stock? %>
+        <%= button_to 'Add to Cart', add_item_cart_path(book_id: book.id), method: :post, class: 'btn btn-sm btn-success w-100 mb-2' %>
+      <% else %>
+        <button class="btn btn-sm btn-secondary w-100 mb-2" disabled>Out of Stock</button>
+      <% end %>
+    <% end %>
     <div class="d-flex gap-2">
       <%= link_to 'View', book, class: "btn btn-sm btn-info #{admin? ? 'flex-fill' : 'w-100'}" %>
       <% if admin? %>

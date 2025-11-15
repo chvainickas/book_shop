@@ -1,0 +1,62 @@
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="alert alert-success">
+      <h4 class="alert-heading">Order Confirmed!</h4>
+      <p>Thank you for your order. Your order has been placed successfully.</p>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">Order Details</h5>
+      </div>
+      <div class="card-body">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <p class="mb-1"><strong>Order Number:</strong> #<%= @order.id %></p>
+            <p class="mb-1"><strong>Order Date:</strong> <%= @order.created_at.strftime('%B %d, %Y at %I:%M %p') %></p>
+            <p class="mb-0"><strong>Status:</strong>
+              <span class="badge bg-<%= @order.status == 'completed' ? 'success' : @order.status == 'pending' ? 'warning' : 'secondary' %>">
+                <%= @order.status.capitalize %>
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <hr>
+
+        <h6 class="mb-3">Order Items</h6>
+        <% @order.order_items.each do |item| %>
+          <div class="row mb-2 pb-2 border-bottom">
+            <div class="col-md-6">
+              <strong><%= item.book.title %></strong>
+              <p class="text-muted small mb-0">by <%= item.book.author %></p>
+            </div>
+            <div class="col-md-2 text-center">
+              Qty: <%= item.quantity %>
+            </div>
+            <div class="col-md-2 text-end">
+              $<%= '%.2f' % item.price %>
+            </div>
+            <div class="col-md-2 text-end">
+              $<%= '%.2f' % item.subtotal %>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="row mt-3 pt-3 border-top">
+          <div class="col-md-8 offset-md-2 text-end">
+            <h5>Total:</h5>
+          </div>
+          <div class="col-md-2 text-end">
+            <h5 class="text-success">$<%= '%.2f' % @order.total %></h5>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex gap-2">
+      <%= link_to 'View All Orders', orders_path, class: 'btn btn-primary' %>
+      <%= link_to 'Continue Shopping', root_path, class: 'btn btn-outline-secondary' %>
+    </div>
+  </div>
+</div>

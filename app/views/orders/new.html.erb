@@ -1,0 +1,53 @@
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <h1>Checkout</h1>
+
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">Order Summary</h5>
+      </div>
+      <div class="card-body">
+        <% @cart.cart_items.each do |item| %>
+          <div class="row mb-2 pb-2 border-bottom">
+            <div class="col-md-6">
+              <strong><%= item.book.title %></strong>
+              <p class="text-muted small mb-0">by <%= item.book.author %></p>
+            </div>
+            <div class="col-md-2 text-center">
+              Qty: <%= item.quantity %>
+            </div>
+            <div class="col-md-2 text-end">
+              $<%= '%.2f' % item.book.price %>
+            </div>
+            <div class="col-md-2 text-end">
+              $<%= '%.2f' % item.subtotal %>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="row mt-3 pt-3 border-top">
+          <div class="col-md-8 offset-md-2 text-end">
+            <h5>Total:</h5>
+          </div>
+          <div class="col-md-2 text-end">
+            <h5 class="text-success">$<%= '%.2f' % @cart.total %></h5>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Confirm Your Order</h5>
+        <p class="text-muted">Review your order and click "Place Order" to complete your purchase.</p>
+
+        <%= form_with url: orders_path, method: :post, data: { turbo: false } do |f| %>
+          <div class="d-flex gap-2">
+            <%= f.submit 'Place Order', class: 'btn btn-success btn-lg flex-fill' %>
+            <%= link_to 'Back to Cart', cart_path, class: 'btn btn-outline-secondary btn-lg' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

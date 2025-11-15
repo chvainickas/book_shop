@@ -1,7 +1,11 @@
 class User < ApplicationRecord
   has_secure_password
 
+  has_one :cart, dependent: :destroy
+  has_many :orders, dependent: :destroy
+
   before_save :downcase_email
+  after_create :create_cart
 
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false },
@@ -12,5 +16,9 @@ class User < ApplicationRecord
 
   def downcase_email
     self.email = email.downcase if email.present?
+  end
+
+  def create_cart
+    Cart.create(user: self)
   end
 end
