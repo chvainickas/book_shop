@@ -5,10 +5,68 @@
   <% end %>
 </div>
 
-<div class="row">
-  <% @books.each do |book| %>
-    <div class="col-md-4 mb-4">
-      <%= render book %>
-    </div>
-  <% end %>
+<div class="row mb-4">
+  <div class="col-md-6">
+    <%= form_with url: books_path, method: :get, data: { turbo_frame: "books_list", turbo_action: "advance" } do |f| %>
+      <div class="input-group">
+        <%= f.text_field :query,
+            value: params[:query],
+            class: 'form-control',
+            placeholder: 'Search by title, author, or description...',
+            autofocus: true,
+            data: { action: "input->search#submit" } %>
+        <button type="submit" class="btn btn-outline-secondary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+          </svg>
+        </button>
+        <% if params[:query].present? %>
+          <%= link_to 'Clear', books_path, class: 'btn btn-outline-danger' %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-md-6 text-end">
+    <p class="text-muted mb-0">
+      <% if params[:query].present? %>
+        Found <%= pluralize(@books.count, 'book') %> matching "<%= params[:query] %>"
+      <% else %>
+        Showing all <%= pluralize(@books.count, 'book') %>
+      <% end %>
+    </p>
+  </div>
 </div>
+
+<%= turbo_frame_tag "books_list" do %>
+  <div class="row">
+    <% if @books.empty? %>
+      <div class="col-12">
+        <div class="alert alert-info">
+          No books found. Try a different search term.
+        </div>
+      </div>
+    <% else %>
+      <% @books.each do |book| %>
+        <div class="col-md-4 mb-4">
+          <%= render book %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+
+<script>
+// Auto-submit search form on input with debouncing
+document.addEventListener('turbo:load', function() {
+  const searchInput = document.querySelector('input[name="query"]');
+  if (searchInput) {
+    let timeout;
+    searchInput.addEventListener('input', function() {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        this.form.requestSubmit();
+      }, 300);
+    });
+  }
+});
+</script>

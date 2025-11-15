@@ -2,7 +2,7 @@ class BooksController < ApplicationController
   before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
 
   def index
-    @books = Book.all
+    @books = Book.search(params[:query])
   end
 
   def show

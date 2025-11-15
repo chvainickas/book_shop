@@ -9,6 +9,13 @@ class Book < ApplicationRecord
   validates :description, presence: true
   validates :stock, numericality: { greater_than_or_equal_to: 0 }
 
+  scope :search, ->(query) {
+    return all if query.blank?
+
+    where("title LIKE ? OR author LIKE ? OR description LIKE ?",
+          "%#{query}%", "%#{query}%", "%#{query}%")
+  }
+
   def in_stock?
     stock > 0
   end
