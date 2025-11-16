@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4.6'
+          bundler-cache: true
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libvips42
+
+      - name: Set up database
+        env:
+          RAILS_ENV: test
+        run: |
+          bin/rails db:create
+          bin/rails db:migrate
+
+      - name: Run tests
+        env:
+          RAILS_ENV: test
+        run: bin/rails test
+
+      - name: Run security checks
+        run: |
+          bundle exec bundler-audit --update
+          bundle exec brakeman -q -w2
