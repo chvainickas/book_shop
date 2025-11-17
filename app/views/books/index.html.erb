@@ -103,10 +103,10 @@
              else %>Newest<% end %>
         </button>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="sortDropdown">
-          <li><%= link_to "Newest", books_path(query: params[:query], category_id: params[:category_id], sort: 'newest', view: params[:view]), class: "dropdown-item", data: { turbo_frame: "_top" } %></li>
-          <li><%= link_to "Title (A-Z)", books_path(query: params[:query], category_id: params[:category_id], sort: 'title', view: params[:view]), class: "dropdown-item", data: { turbo_frame: "_top" } %></li>
-          <li><%= link_to "Price (Low to High)", books_path(query: params[:query], category_id: params[:category_id], sort: 'price_low', view: params[:view]), class: "dropdown-item", data: { turbo_frame: "_top" } %></li>
-          <li><%= link_to "Price (High to Low)", books_path(query: params[:query], category_id: params[:category_id], sort: 'price_high', view: params[:view]), class: "dropdown-item", data: { turbo_frame: "_top" } %></li>
+          <li><%= link_to "Newest", books_path(query: params[:query], category_id: params[:category_id], sort: 'newest', view: params[:view]), class: "dropdown-item", data: { turbo: false } %></li>
+          <li><%= link_to "Title (A-Z)", books_path(query: params[:query], category_id: params[:category_id], sort: 'title', view: params[:view]), class: "dropdown-item", data: { turbo: false } %></li>
+          <li><%= link_to "Price (Low to High)", books_path(query: params[:query], category_id: params[:category_id], sort: 'price_low', view: params[:view]), class: "dropdown-item", data: { turbo: false } %></li>
+          <li><%= link_to "Price (High to Low)", books_path(query: params[:query], category_id: params[:category_id], sort: 'price_high', view: params[:view]), class: "dropdown-item", data: { turbo: false } %></li>
         </ul>
       </div>
       <p class="text-muted mb-0 small">
